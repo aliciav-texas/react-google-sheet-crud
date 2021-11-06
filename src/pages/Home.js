@@ -1,15 +1,15 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { sheetsUrl } from "../config.js";
 
 const Home = () => {
   const [data, setData] = useState();
 
   const getData = async () => {
     try {
-      const res = await fetch(
-        "https://sheet.best/api/sheets/bff990d0-8ada-43e9-97eb-0ad668bb19ec?_format=index"
-      );
+      const res = await fetch(sheetsUrl);
       const data = await res.json();
+      console.log(data);
       setData(Object.keys(data).map((key) => data[key]));
     } catch (error) {
       console.log(error);
@@ -22,12 +22,9 @@ const Home = () => {
 
   const handleDelete = async (rowIndex) => {
     try {
-      const res = await fetch(
-        `https://sheet.best/api/sheets/bff990d0-8ada-43e9-97eb-0ad668bb19ec/${rowIndex}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const res = await fetch(sheetsUrl`/${rowIndex}`, {
+        method: "DELETE",
+      });
       if (res.ok) {
         const updatedData = data.filter((_, i) => i !== rowIndex);
         setData(updatedData);

@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-
+import { sheetsUrl } from "../config.js";
 const Edit = () => {
   const history = useHistory();
   const { rowIndex } = useParams();
@@ -14,9 +14,7 @@ const Edit = () => {
 
   const getData = async () => {
     try {
-      const res = await fetch(
-        `https://sheet.best/api/sheets/bff990d0-8ada-43e9-97eb-0ad668bb19ec/${rowIndex}`
-      );
+      const res = await fetch(sheetsUrl`/${rowIndex}`);
       const data = await res.json();
       setData(data[0]);
     } catch (error) {
@@ -34,16 +32,13 @@ const Edit = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(
-        `https://sheet.best/api/sheets/bff990d0-8ada-43e9-97eb-0ad668bb19ec/${rowIndex}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const res = await fetch(sheetsUrl`/${rowIndex}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
       if (res.ok) {
         history.replace("/");
       }
